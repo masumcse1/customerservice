@@ -11,6 +11,9 @@ public class CustomerMapper {
     public Customer getEntityFromDto(CustomerDto dto){
         Customer customer  = new Customer();
         customer.setCustomerName(dto.getCustomerName());
+        customer.setDescription(dto.getDescription());
+        customer.setBalance(dto.getBalance());
+        customer.setStatus(dto.getStatus());
         return customer;
     }
 

@@ -20,9 +20,9 @@ import java.util.Optional;
 @RequestMapping("/api/customers")
 public class CustomerController {
 
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
-    private  MessageSource messageSource;
+    private final MessageSource messageSource;
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     public RestResponse save(@RequestBody CustomerDto dto) {
@@ -31,20 +31,20 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public RestResponse update(@PathVariable Long id, @RequestBody CustomerDto dto) {
+    public RestResponse update(@PathVariable(name = "id") Long id, @RequestBody CustomerDto dto) {
         Customer customer = customerService.update(id, dto);
         return RestResponse.builder(customer).build();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public RestResponse delete(@PathVariable Long id) {
+    public RestResponse delete(@PathVariable(name = "id") Long id) {
         Customer customer = customerService.findById(id).orElseThrow(() -> new NotFoundException(messageSource.getMessage("NOTFOUND", null, LocaleContextHolder.getLocale())));
         customerService.delete(customer);
         return RestResponse.builder(id).build();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public RestResponse getCustomer(@PathVariable Long id) {
+    public RestResponse getCustomer(@PathVariable(name = "id")  Long id) {
         Optional<Customer> customer = customerService.findById(id);
         return RestResponse.builder(customer).build();
     }
