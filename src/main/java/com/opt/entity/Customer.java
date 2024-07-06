@@ -1,7 +1,10 @@
 package com.opt.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -9,10 +12,10 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "customer")
 @Data
+@NoArgsConstructor
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String customerId;
     private String customerName;
@@ -21,5 +24,14 @@ public class Customer {
     private LocalDate admissionDate;
     private LocalTime admissionTime;
     private Boolean status;
+    @NotBlank
+    @Column(nullable = false, unique = true)
+    private String phoneNumber;
+
+    public Customer(Long id, String customerName, String phoneNumber) {
+        this.id = id;
+        this.customerName = customerName;
+        this.phoneNumber = phoneNumber;
+    }
 
 }

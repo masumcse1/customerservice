@@ -1,58 +1,60 @@
 package com.opt.repository;
 
 import com.opt.entity.Customer;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@DataJpaTest
 class CustomerRepositoryTest {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private  CustomerRepository underTest;
 
-    @Test
-    void deleteInBatch() {
+    @BeforeEach
+    void setUp() {
+    }
+
+    @AfterEach
+    void tearDown() {
     }
 
     @Test
-    void getCustomerByStatus() {
-    }
+    void itshouldsaveByPHone() {
+        //Given
+        Long id =100L;
+        String phoneNumber = "01728";
+        Customer customer = new Customer(id,"masum","phoneNumber");
 
-    @Test
-    void getCustomerByAdmissionDate() {
-    }
+        //when
 
-    @Test
-    void findByCustomerName() {
-    }
+        underTest.save(customer);
+
+        //then
 
 
-    @Test
-    void saveMethod() {
-        // create product
+        Optional<Customer> optionalCustomer = underTest.findById(customer.getId());
+        assertThat(optionalCustomer)
+                .isPresent()
+                .hasValueSatisfying(c -> {
+                    assertThat(c).isEqualToComparingFieldByField(customer);
+                });
 
-        Customer customer = new Customer();
-        customer.setDescription("description");
-        customer.setCustomerName("masum");
-        customer.setStatus(Boolean.FALSE);
-        customerRepository.save(customer);
+       /* Optional<Customer> retrieveCustomer = underTest.findById(customer.getId());
 
-        // save product
-        Optional<Customer> customerfromdb = customerRepository.findById(Long.valueOf(1));
 
-        // display product info
-        assertThat(customerfromdb).isNotNull();
 
-    }
-
-    @Test
-    void findByCustomerIdOrAccountNoOrDescription() {
+        Customer retrieveCustomer1 = retrieveCustomer.get();
+        assertEquals(retrieveCustomer1.getId(),id);
+        assertEquals(retrieveCustomer1.getPhoneNumber(),phoneNumber);*/
 
 
     }
