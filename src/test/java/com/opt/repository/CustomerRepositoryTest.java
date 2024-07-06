@@ -58,16 +58,14 @@ class CustomerRepositoryTest {
         underTest.save(customer);
         //then
 
-        Optional<Customer> retrieveCs = underTest.findById(customer.getId());
-        assertThat(retrieveCs).isPresent().hasValueSatisfying(c->{
+        Optional<Customer> retrieveCS = underTest.findById(customer.getId());
+        assertThat(retrieveCS).isPresent().hasValueSatisfying(c->{
 
+
+            assertThat(c).isEqualTo(customer);
             assertThat(c).isEqualToComparingFieldByField(customer);
 
         });
-
-
-
-
 
     }
 }
