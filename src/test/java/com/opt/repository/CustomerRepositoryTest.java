@@ -61,11 +61,26 @@ class CustomerRepositoryTest {
         Optional<Customer> retrieveCS = underTest.findById(customer.getId());
         assertThat(retrieveCS).isPresent().hasValueSatisfying(c->{
 
-
+            assertThat(c.getCustomerId()).isEqualTo(customer.getCustomerId());
             assertThat(c).isEqualTo(customer);
             assertThat(c).isEqualToComparingFieldByField(customer);
 
         });
+
+    }
+
+    @Test
+    void itshouldPHoneNonotExists() {
+
+        //Given
+        String phoneNumber = "01728";
+
+        //shen
+        Optional<Customer> customer = underTest.readByPhoneNumber(phoneNumber);
+
+        //then
+       // assertThat(customer).isPresent();
+        assertThat(customer).isNotPresent();
 
     }
 }

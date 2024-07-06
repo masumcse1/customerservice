@@ -14,6 +14,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> getCustomerByStatus(Boolean status);
     List<Customer> getCustomerByAdmissionDate(LocalDate admissionDate);
     Optional<Customer> findByCustomerName(String customerName);
+    Optional<Customer> readByPhoneNumber(String customerName);
    // Page<Customer> findByCustomerIdOrAccountNoOrDescription(String customerId, String accountNo, String description, Pageable pageable);
 
 
