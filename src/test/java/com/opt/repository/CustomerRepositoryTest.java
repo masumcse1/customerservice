@@ -6,10 +6,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
@@ -47,7 +49,7 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    void itshouldSaveTest2 () {
+    void itshouldSaveTest2() {
 
         //Given
         Long id = 100L;
@@ -59,7 +61,7 @@ class CustomerRepositoryTest {
         //then
 
         Optional<Customer> retrieveCS = underTest.findById(customer.getId());
-        assertThat(retrieveCS).isPresent().hasValueSatisfying(c->{
+        assertThat(retrieveCS).isPresent().hasValueSatisfying(c -> {
 
             assertThat(c.getCustomerId()).isEqualTo(customer.getCustomerId());
             assertThat(c).isEqualTo(customer);
@@ -79,8 +81,29 @@ class CustomerRepositoryTest {
         Optional<Customer> customer = underTest.readByPhoneNumber(phoneNumber);
 
         //then
-       // assertThat(customer).isPresent();
+        // assertThat(customer).isPresent();
         assertThat(customer).isNotPresent();
 
     }
+
+
+    @Test
+    void phonenovalidTest() {
+
+        //Given
+        Long id = 100L;
+        String phoneNumber = "01728";
+        Customer customer = new Customer(id, "masum", null);
+
+        //when
+        //then
+
+        assertThatThrownBy(()->underTest.save(customer))
+                .hasMessageContaining("not-null property references a null or transient value : com.opt.entity.Customer.phoneNumber")
+                .isInstanceOf(DataIntegrityViolationException.class);
+
+
+    }
+
+
 }
