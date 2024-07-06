@@ -5,19 +5,17 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 class CustomerRepositoryTest {
 
     @Autowired
-    private  CustomerRepository underTest;
+    private CustomerRepository underTest;
 
     @BeforeEach
     void setUp() {
@@ -30,31 +28,19 @@ class CustomerRepositoryTest {
     @Test
     void itshouldsaveByPHone() {
         //Given
-        Long id =100L;
+        Long id = 100L;
         String phoneNumber = "01728";
-        Customer customer = new Customer(id,"masum","phoneNumber");
+        Customer customer = new Customer(id, "masum", phoneNumber);
 
         //when
-
         underTest.save(customer);
 
         //then
-
-
-        Optional<Customer> optionalCustomer = underTest.findById(customer.getId());
-        assertThat(optionalCustomer)
-                .isPresent()
-                .hasValueSatisfying(c -> {
-                    assertThat(c).isEqualToComparingFieldByField(customer);
-                });
-
-       /* Optional<Customer> retrieveCustomer = underTest.findById(customer.getId());
-
-
+        Optional<Customer> retrieveCustomer = underTest.findById(customer.getId());
 
         Customer retrieveCustomer1 = retrieveCustomer.get();
-        assertEquals(retrieveCustomer1.getId(),id);
-        assertEquals(retrieveCustomer1.getPhoneNumber(),phoneNumber);*/
+        assertEquals(retrieveCustomer1.getId(), id);
+        assertEquals(retrieveCustomer1.getPhoneNumber(), phoneNumber);
 
 
     }
