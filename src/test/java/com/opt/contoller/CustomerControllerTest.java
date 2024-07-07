@@ -35,16 +35,13 @@ class CustomerControllerTest {
         ResultActions customerRegResultActions = mockMvc.perform(post("/api/customers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(customerRegistrationRequest)));
-        // Then both customer registration and payment requests are 200 status code
       customerRegResultActions.andExpect(status().isOk());
 
-        // Payment is stored in db
-        // TODO: Do not use paymentRepository instead create an endpoint to retrieve payments for customers
        /* assertThat(paymentRepository.findById(paymentId))
                 .isPresent()
                 .hasValueSatisfying(p -> assertThat(p).isEqualToComparingFieldByField(payment));
 */
-        // TODO: Ensure sms is delivered
+
     }
 
     private String objectToJson(Object object) {
