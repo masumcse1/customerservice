@@ -6,14 +6,15 @@ import com.opt.repository.CustomerRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.BDDAssumptions.given;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
@@ -108,7 +109,6 @@ class CustomerServiceTest {
         // ... No customer with phone number passed
         when(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).thenReturn(Optional.of(customerTwo));
         //shen
-
 
 
         //then

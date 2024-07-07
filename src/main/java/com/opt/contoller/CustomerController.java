@@ -1,6 +1,7 @@
 package com.opt.contoller;
 
 import com.opt.dto.CustomerDto;
+import com.opt.dto.CustomerRegistrationRequest;
 import com.opt.entity.Customer;
 import com.opt.exception.NotFoundException;
 import com.opt.mapper.RestResponse;
@@ -25,6 +26,14 @@ public class CustomerController {
     private final MessageSource messageSource;
 
     @RequestMapping(value = "", method = RequestMethod.POST)
+    public void registerNewCustomer(
+            @RequestBody CustomerRegistrationRequest request) {
+        customerService.registerNewCustomer(request);
+
+        System.out.println("##"+request.getCustomer().toString());
+    }
+   
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     public RestResponse save(@RequestBody CustomerDto dto) {
         Customer customer = customerService.save(dto);
         return RestResponse.builder(customer).build();
@@ -57,7 +66,7 @@ public class CustomerController {
 
     @RequestMapping(value = "/{status}/customer/list", method = RequestMethod.GET)
     public  RestResponse getCustomersByStatus(@PathVariable Boolean status){
-        List<Customer> customers = customerService.getCustomersByStatus(status);
+        List<Customer> customers =null;//= customerService.getCustomersByStatus(status);
         return RestResponse.builder(customers).build();
     }
 

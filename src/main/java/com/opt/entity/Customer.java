@@ -25,7 +25,7 @@ public class Customer {
     private LocalTime admissionTime;
     private Boolean status;
     @NotBlank
-    @Column(nullable = false, unique = true)
+    @Column(name = "phone_number",nullable = false, unique = true)
     private String phoneNumber;
 
     public Customer(Long id, String customerName, String phoneNumber) {
@@ -34,4 +34,12 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", customerName='" + customerName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
 }
