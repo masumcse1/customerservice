@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,17 @@ public class CustomerController {
     private ICustomerService customerService;
 
     private  MessageSource messageSource;
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public RestResponse getCustomer(@PathVariable(name = "id")  Long id) {
+        Optional<Customer> customer = customerService.findById(id);
+        return RestResponse.builder(customer.get()).build();
+    }
+
+    @RequestMapping(value = "/cs/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Customer>  getCustomerXX(@PathVariable(name = "id")  Long id) {
+      return   customerService.findById(id).map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+    }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     public void registerNewCustomer(@RequestBody CustomerRegistrationRequest request) {
@@ -51,11 +63,6 @@ public class CustomerController {
         return RestResponse.builder(id).build();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public RestResponse getCustomer(@PathVariable(name = "id")  Long id) {
-        Optional<Customer> customer = customerService.findById(id);
-        return RestResponse.builder(customer).build();
-    }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public RestResponse  findAllCustomer(Customer customer){
