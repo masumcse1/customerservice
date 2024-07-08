@@ -6,9 +6,11 @@ import com.opt.entity.Customer;
 import com.opt.exception.NotFoundException;
 import com.opt.mapper.RestResponse;
 import com.opt.service.CustomerService;
+import com.opt.service.ICustomerService;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -17,24 +19,21 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/customers")
 public class CustomerController {
 
-    private final CustomerService customerService;
+    @Autowired
+    private ICustomerService customerService;
 
-    private final MessageSource messageSource;
+    private  MessageSource messageSource;
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void registerNewCustomer(
-            @RequestBody CustomerRegistrationRequest request) {
+    public void registerNewCustomer(@RequestBody CustomerRegistrationRequest request) {
         customerService.registerNewCustomer(request);
-
-        System.out.println("##"+request.getCustomer().toString());
     }
    
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public RestResponse save(@RequestBody CustomerDto dto) {
+    public RestResponse saveCustomer(@RequestBody CustomerDto dto) {
         Customer customer = customerService.save(dto);
         return RestResponse.builder(customer).build();
     }

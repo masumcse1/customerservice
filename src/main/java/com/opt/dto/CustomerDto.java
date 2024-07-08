@@ -16,4 +16,5 @@ public class CustomerDto {
     private LocalDate transactionDate;
     private LocalTime transactionTime;
     private Boolean status;
+    private String phoneNumber;
 }

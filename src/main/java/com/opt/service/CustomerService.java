@@ -13,18 +13,15 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class CustomerService {
+public class CustomerService implements ICustomerService {
 
+    private  CustomerRepository customerRepository;
 
-    private final CustomerRepository customerRepository;
-
-    @Autowired
     public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
-   // @Autowired
-  //  private CustomerMapper customerMapper;
 
+    @Override
     public void registerNewCustomer(CustomerRegistrationRequest request) {
         String phoneNumber = request.getCustomer().getPhoneNumber();
 
@@ -45,33 +42,37 @@ public class CustomerService {
         customerRepository.save(request.getCustomer());
     }
 
+    @Override
     public Customer save(CustomerDto dto) {
-      //  Customer customer = customerMapper.getEntityFromDto(dto);
-      //  return customerRepository.save(customer);
-        return null;
+        Customer customer = new Customer();
+        customer.setId(dto.getId());
+        customer.setCustomerName(dto.getCustomerName());
+        customer.setPhoneNumber(dto.getPhoneNumber());
+        return customerRepository.save(customer);
     }
 
+    @Override
     public Customer update(Long id, CustomerDto customerDto) {
         Optional<Customer> customerOpt = customerRepository.findById(id);
         Customer customer = customerOpt.get();
         customer.setDescription(customerDto.getDescription());
         return customerRepository.save(customer);
     }
-
+    @Override
     public void delete(Customer customer) {
 
         customerRepository.delete(customer);
     }
-
+    @Override
     public Optional<Customer> findById(Long id) {
         return customerRepository.findById(id);
     }
 
-
+    @Override
     public List<Customer> findAll() {
         return customerRepository.findAll();
     }
-
+    @Override
     public List<Customer> getCustomersByStatus(Boolean status) {
         return customerRepository.getCustomerByStatus(status);
     }
