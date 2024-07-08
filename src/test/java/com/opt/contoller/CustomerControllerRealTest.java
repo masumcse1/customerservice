@@ -36,14 +36,16 @@ class CustomerControllerRealTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockBean
     private ICustomerService customerService;
 
     @MockBean
     private CustomerMapper customerMapper;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+
 
     @Test
     void itShouldregisterNewCustomerTest() throws Exception {
@@ -192,5 +194,12 @@ class CustomerControllerRealTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.customerName", is(updatedCustomer.getCustomerName())))
                 .andExpect(jsonPath("$.data.phoneNumber", is(updatedCustomer.getPhoneNumber())));
+
+
+
+
+
+
+
     }
 }

@@ -1,5 +1,6 @@
 package com.opt.service;
 
+import com.opt.dto.CustomerDto;
 import com.opt.dto.CustomerRegistrationRequest;
 import com.opt.entity.Customer;
 import com.opt.repository.CustomerRepository;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
@@ -64,7 +66,9 @@ class CustomerServiceTest {
         Customer rscustomer = new Customer(null, "masum", phoneNumber);
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(rscustomer);
         //Given
-        when(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).thenReturn(Optional.empty());
+      //  when(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).thenReturn(Optional.empty());  // works
+        given(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).willReturn(Optional.empty());   // works
+
         undertest.registerNewCustomer(request);
         //then
         //verify
@@ -115,6 +119,40 @@ class CustomerServiceTest {
         assertThatThrownBy(() -> undertest.registerNewCustomer(request))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining(String.format("phone number [%s] is taken", phoneNumber));
+
+    }
+
+
+    @Test
+    void saveTest() {
+
+        //Given
+        // Given a phone number and a customer
+        String phoneNumber = "000099";
+        Customer customer = new Customer(200L, "Maryam", phoneNumber);
+        Customer customerTwo = new Customer(300L, "John", phoneNumber);
+
+        // ... a request
+       CustomerDto customerDto = new CustomerDto();
+       customerDto.setId(customer.getId());
+       customerDto.setCustomerName(customer.getCustomerName());
+       customerDto.setPhoneNumber(customer.getPhoneNumber());
+
+        // ... No customer with phone number passed
+        when(customerRepository.save(customer)).thenReturn(customer);
+        //shen
+        Customer save = undertest.save(customerDto);
+
+        //then
+
+        then(customerRepository).should().save(customerArgumentCaptor.capture());
+        Customer customerArgumentCaptorValue = customerArgumentCaptor.getValue();
+        assertThat(customerArgumentCaptorValue).isEqualTo(customer);
+
+        assertThat(customer).isEqualToComparingFieldByField(save);
+        assertThat(customer).isEqualToComparingFieldByField(save);
+
+
 
     }
 }
