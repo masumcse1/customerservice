@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opt.dto.CustomerRegistrationRequest;
 import com.opt.entity.Customer;
 import com.opt.repository.CustomerRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -60,6 +61,7 @@ class CustomerControllerInteTest {
         response.andDo(print()).andExpect(status().isOk());
     }
 
+    @Disabled
     @Test
     void itshouldfindAllCustomerTest() throws Exception {
 

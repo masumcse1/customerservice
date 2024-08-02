@@ -75,6 +75,23 @@ public class CustomerController {
         List<Customer> customers =null;//= customerService.getCustomersByStatus(status);
         return RestResponse.builder(customers).build();
     }
+/*
+    @RequestMapping(value = "/{id}/paymentmethod", method = RequestMethod.GET)
+    public RestResponse getPaymentMethodByType(@PathVariable("id") String id, @RequestParam("type") PaymentMethodType type)throws CardException, AuthenticationException, StripeException, InvalidRequestException  {
+        List<PaymentMethodModel> paymentMethods = customerService.getPaymentMethodByType(id, type);
+        return RestResponse.builder(paymentMethods).build();
+    }
+
+
+       @RequestMapping(value = "/{id}/paymentmethod", method = RequestMethod.POST)
+    public RestResponse addPaymentMethod(@PathVariable("id") String id, @Valid @RequestBody PaymentMethodForm form)throws CardException, AuthenticationException, StripeException, InvalidRequestException  {
+        PaymentMethodModel paymentMethodModel = customerService.addPaymentMethod(id, form);
+        return RestResponse.builder(paymentMethodModel).build();
+    }
+
+
+    */
+
 
 
 }
