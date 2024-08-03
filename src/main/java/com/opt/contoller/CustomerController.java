@@ -2,11 +2,20 @@ package com.opt.contoller;
 
 import com.opt.dto.CustomerDto;
 import com.opt.dto.CustomerRegistrationRequest;
+import com.opt.dto.MessageConstant;
 import com.opt.entity.Customer;
 import com.opt.exception.NotFoundException;
 import com.opt.mapper.RestResponse;
 import com.opt.service.CustomerService;
 import com.opt.service.ICustomerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +27,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(
+        name = "CRUD REST APIs for Customer Resource",
+        description = "Customer REST APIs - Create User, Update User, Get User, Get All Users, Delete Customer"
+)
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/customers")
@@ -28,6 +41,11 @@ public class CustomerController {
 
     private  MessageSource messageSource;
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description =  MessageConstant.GET_PAGED_OBJECT, content = { @Content(mediaType = "application/json", schema = @Schema(implementation = CustomerDto.class))}),
+            @ApiResponse(responseCode = "400", description =  MessageConstant.BAD_REQUEST_MSG,  content = @Content),
+            @ApiResponse(responseCode = "500", description =  MessageConstant.INTERNAL_SERVER_ERROR_MSG, content = @Content)})
+    @Parameter(in = ParameterIn.QUERY, name = "id", schema =@Schema(type = "string", example = "acct_m0CB9LflojZxytfC"), required =false)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public RestResponse getCustomer(@PathVariable(name = "id")  Long id) {
         Optional<Customer> customer = customerService.findById(id);
@@ -45,6 +63,15 @@ public class CustomerController {
     }
    
     @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @Operation(
+            summary = "Create Customer REST API",
+            description = " save customer in a database"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            content = { @Content(mediaType = "application/json", schema =@Schema(implementation = CustomerDto.class))},
+            description = "HTTP Status 201 CREATED"
+    )
     public RestResponse saveCustomer(@RequestBody CustomerDto dto) {
         Customer customer = customerService.save(dto);
         return RestResponse.builder(customer).build();
